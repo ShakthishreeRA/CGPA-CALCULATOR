@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CGPA Calculator</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+            text-align:center;
+            padding:20px;
+        }
+
+        .container{
+            max-width:600px;
+            margin:auto;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.2);
+        }
+
+        input, select{
+            padding:10px;
+            margin:5px;
+            width:150px;
+        }
+
+        button{
+            padding:10px 20px;
+            margin:10px;
+            background:#007bff;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        table{
+            width:100%;
+            margin-top:20px;
+            border-collapse:collapse;
+        }
+
+        th, td{
+            border:1px solid #ddd;
+            padding:10px;
+        }
+
+        th{
+            background:#007bff;
+            color:white;
+        }
+
+        #result{
+            font-size:24px;
+            margin-top:20px;
+            color:green;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎓 CGPA Calculator</h1>
+
+    <input type="number" id="credit" placeholder="Credits">
+
+    <select id="grade">
+        <option value="10">O (10)</option>
+        <option value="9">A+ (9)</option>
+        <option value="8">A (8)</option>
+        <option value="7">B+ (7)</option>
+        <option value="6">B (6)</option>
+        <option value="5">C (5)</option>
+    </select>
+
+    <button onclick="addSubject()">Add Subject</button>
+
+    <table id="subjectTable">
+        <tr>
+            <th>Credits</th>
+            <th>Grade Point</th>
+        </tr>
+    </table>
+
+    <button onclick="calculateCGPA()">Calculate CGPA</button>
+    <button onclick="clearData()">Clear</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+let subjects = [];
+
+function addSubject() {
+    let credit = parseFloat(document.getElementById("credit").value);
+    let grade = parseFloat(document.getElementById("grade").value);
+
+    if (!credit || credit <= 0) {
+        alert("Enter valid credits");
+        return;
+    }
+
+    subjects.push({credit, grade});
+
+    let table = document.getElementById("subjectTable");
+    let row = table.insertRow();
+
+    row.insertCell(0).innerHTML = credit;
+    row.insertCell(1).innerHTML = grade;
+
+    document.getElementById("credit").value = "";
+}
+
+function calculateCGPA() {
+    let totalCredits = 0;
+    let totalPoints = 0;
+
+    subjects.forEach(sub => {
+        totalCredits += sub.credit;
+        totalPoints += sub.credit * sub.grade;
+    });
+
+    if(totalCredits === 0){
+        alert("Add subjects first");
+        return;
+    }
+
+    let cgpa = totalPoints / totalCredits;
+
+    document.getElementById("result").innerHTML =
+        "CGPA: " + cgpa.toFixed(2);
+}
+
+function clearData(){
+    subjects = [];
+
+    document.getElementById("subjectTable").innerHTML =
+        `<tr>
+            <th>Credits</th>
+            <th>Grade Point</th>
+        </tr>`;
+
+    document.getElementById("result").innerHTML = "";
+}
+</script>
+
+</body>
+</html>
